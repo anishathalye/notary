@@ -1,0 +1,10 @@
+.vagrant/
+*.log
+compiled/
+soc.rkt
+*.smt2
+*.mem
+*.elf
+*.bin
+*.lst
+*.o

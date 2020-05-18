@@ -1,0 +1,41 @@
+language: c
+dist: bionic
+
+addons:
+  apt:
+    update: true
+    packages:
+      - build-essential
+      - clang
+      - bison
+      - flex
+      - libreadline-dev
+      - gawk
+      - tcl-dev
+      - libffi-dev
+      - git
+      - graphviz
+      - xdot
+      - pkg-config
+      - python3
+      - libboost-system-dev
+      - libboost-python-dev
+      - libboost-filesystem-dev
+      - zlib1g-dev
+      - python3-pip
+      - gcc-riscv64-linux-gnu
+
+before_install:
+  - .ci/install-yosys.sh
+  - .ci/install-racket.sh
+  - pip3 install bin2coe
+  - PATH="${HOME}/yosys:${HOME}/racket/bin:${HOME}/.local/bin:${PATH}"
+  - raco pkg install --no-docs --batch --auto https://github.com/anishathalye/rtl.git
+
+script:
+  - make
+  # we can't print all the output, because it exceeds the Travis limit
+  #
+  # and we can't redirect all output to /dev/null or take the tail of the
+  # output, because then Travis detects it as a stalled build
+  - make verify | awk 'BEGIN { printall=0 } $1 == "cycle" && $2 % 1000 == 0 || printall { print } $1 == "cycle" && $2 == "180000" { printall=1 }'
