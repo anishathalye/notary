@@ -17,12 +17,14 @@ open-source modules:
 
 ## Use
 
-To run the verification, run `make verify`. This will build the firmware,
-transform the Verilog code describing the SoC into a format suitable for
-symbolic simulation, and run the verification code. The output looks like this:
+To run the verification, run `make verify && racket verify.rkt`. This will
+build the firmware, transform the Verilog code describing the SoC into a format
+suitable for symbolic simulation, and run the verification code. The output
+looks like this:
 
 ```console
 $ make verify
+$ racket verify.rkt
 ...
 cycle 0
   stepped in 117.4ms
@@ -68,12 +70,12 @@ and terminates.
 
 If you're looking to experiment with the code, it's convenient to reduce the
 size of the RAM (edit the parameter `RAM_ADDR_BITS` in [`hw/soc.v`](hw/soc.v)
-to something like `8`), and then change the `#:try-verify-after` keyword
-argument in [`verify.rkt`](verify.rkt) to `0`, so you can see the SMT output
-from cycle 0. A neat thing to try is to break the deterministic start code by
-editing [`fw/firmware.s`](fw/firmware.s), or try alternative strategies to
-clear the state (e.g. xor a register with itself to clear it, instead of
-loading a constant 0).
+to something like `8`), and then supply a `--start 0` argument to `racket
+verify.rkt`, so you can see the SMT output from cycle 0. A neat thing to try is
+to break the deterministic start code by editing
+[`fw/firmware.s`](fw/firmware.s), or try alternative strategies to clear the
+state (e.g. xor a register with itself to clear it, instead of loading a
+constant 0).
 
 ## Setup
 
@@ -87,6 +89,7 @@ To run the verification script, run the following in the VM:
 ```console
 $ cd /notary
 $ make verify
+$ racket verify.rkt
 ````
 
 ### Dependencies

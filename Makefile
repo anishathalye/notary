@@ -27,7 +27,7 @@ LDFLAGS := -melf32lriscv -nostdlib
 BIN2COEFLAGS := --width 32 --depth $(ROM_DEPTH) --fill 0
 
 .PHONY: all
-all: soc.rkt
+all: soc.rkt verify
 
 .PHONY: clean
 clean:
@@ -70,4 +70,3 @@ soc.rkt: hw/soc.smt2
 .PHONY: verify
 verify: soc.rkt verify.rkt
 	raco make verify.rkt
-	racket verify.rkt
