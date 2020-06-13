@@ -47,7 +47,6 @@
 (define exactly (make-parameter #f))
 
 (command-line
- #:program "verify"
  #:once-each
  [("-s" "--start") s
                    "Start invoking the SMT solver beyond this point"

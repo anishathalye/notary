@@ -33,9 +33,9 @@ before_install:
   - raco pkg install --no-docs --batch --auto https://github.com/anishathalye/rtl.git
 
 script:
-  - make
+  - make verify
   # we can't print all the output, because it exceeds the Travis limit
   #
   # and we can't redirect all output to /dev/null or take the tail of the
   # output, because then Travis detects it as a stalled build
-  - make verify | awk 'BEGIN { printall=0 } $1 == "cycle" && $2 % 1000 == 0 || printall { print } $1 == "cycle" && $2 == "180000" { printall=1 }'
+  - racket verify.rkt | awk 'BEGIN { printall=0 } $1 == "cycle" && $2 % 1000 == 0 || printall { print } $1 == "cycle" && $2 == "180000" { printall=1 }'
