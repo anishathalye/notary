@@ -4,7 +4,7 @@
          yosys/parameters
          shiva
          rosutil
-         (only-in racket struct-copy make-parameter string->number exit)
+         (only-in racket/base struct-copy make-parameter build-list string->number exit)
          (only-in racket/cmdline command-line)
          syntax/parse/define)
 
