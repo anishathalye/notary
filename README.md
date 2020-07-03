@@ -75,7 +75,8 @@ verify.rkt`, so you can see the SMT output from cycle 0. A neat thing to try is
 to break the deterministic start code by editing
 [`fw/firmware.s`](fw/firmware.s), or try alternative strategies to clear the
 state (e.g. xor a register with itself to clear it, instead of loading a
-constant 0).
+constant 0). If you want to skip verifying that RAM is cleared, you can pass
+`--fast`.
 
 ## Setup
 
