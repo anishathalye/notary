@@ -70,7 +70,6 @@
 
 (define cycles
   (verify-deterministic-start
-   soc_s
    new-symbolic-soc_s
    #:invariant soc_i
    #:step soc_t
