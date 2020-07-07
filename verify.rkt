@@ -1,9 +1,11 @@
 #lang racket/base
 
 (require "soc.rkt"
-         racket/match racket/cmdline syntax/parse/define
+         racket/match racket/cmdline racket/string
          (prefix-in @ (combine-in rosette rosutil))
          yosys shiva)
+
+(@term-cache-ephemeral!)
 
 (define DEFAULT-TRY-VERIFY-AFTER 180340)
 (define FAST-TRY-VERIFY-AFTER 100)
@@ -11,29 +13,44 @@
 (overapproximate-symbolic-load-threshold 64)
 (overapproximate-symbolic-store-threshold 64)
 
-(define (input-setter s)
-  (update-soc_s
-   s
-   [resetn #t]
-   [gpio_pin_in (@bv 0 8)]
-   [uart_rx (@bv #b1111 4)]))
+(define inputs-symbolic
+  '(gpio_pin_in
+    uart_rx))
 
-(define (init-input-setter s)
-  (update-soc_s
-   s
-   [resetn #f]
-   [gpio_pin_in (@bv 0 8)]
-   [uart_rx (@bv #b1111 4)]))
+(define inputs-default
+  `((gpio_pin_in . ,(@bv 0 8))
+    (uart_rx . ,(@bv #xf 4))))
 
-(define (statics s)
+(define statics
   ; for some reason, the picorv32 has a physical register for x0/zero,
   ; cpuregs[0], whose value can never change in practice
-  (@vector-ref (|soc_m cpu.cpuregs| s) 0))
+  '((cpu.cpuregs 0)))
+
+(define (hints-default q . args)
+  (match q
+    ['statics statics]
+    [_ #f]))
+
+(define abstract-command
+  (let ([all-fields (fields (new-zeroed-soc_s))])
+    (cons 'abstract (filter (lambda (f) (string-contains? (symbol->string f) "uart.recv_")) all-fields))))
+
+(define (hints-symbolic q . args)
+  (match q
+    ['statics statics]
+    ['general
+     (match-define (list cycle sn) args)
+     (cond
+       [(zero? (modulo cycle 100)) (list abstract-command 'collect-garbage)]
+       [else '#f])]))
 
 (define start (make-parameter DEFAULT-TRY-VERIFY-AFTER))
 (define limit (make-parameter #f))
 (define exactly (make-parameter #f))
 (define fast (make-parameter #f))
+(define inputs (make-parameter inputs-default))
+(define hints (make-parameter hints-default))
+(define output-getters (make-parameter '()))
 
 (command-line
  #:once-each
@@ -48,7 +65,12 @@
                      (exactly (string->number x))]
  [("-f" "--fast") "Skip verifying that RAM is cleared"
                   (fast #t)
-                  (start (min (start) FAST-TRY-VERIFY-AFTER))])
+                  (start (min (start) FAST-TRY-VERIFY-AFTER))]
+ [("-i" "--inputs") "Analyze symbolic inputs"
+                    (inputs inputs-symbolic)
+                    (hints hints-symbolic)]
+ [("-o" "--outputs") "Analyze outputs"
+                     (output-getters outputs)])
 
 (define state-getters
   (let ([all-getters (append registers memories)])
@@ -61,10 +83,12 @@
    new-symbolic-soc_s
    #:invariant soc_i
    #:step soc_t
-   #:init-input-setter init-input-setter
-   #:input-setter input-setter
+   #:reset 'resetn
+   #:reset-active 'low
+   #:inputs (inputs)
    #:state-getters state-getters
-   #:statics statics
+   #:output-getters (output-getters)
+   #:hints (hints)
    #:print-style 'names
    #:try-verify-after (or (exactly) (start))
    #:limit (or (exactly) (limit))))

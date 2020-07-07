@@ -30,7 +30,9 @@ assign gpio_rdata = {24'h0000_00, gpio_pin_in};
 // write logic
 reg [7:0] gpio_out;
 always @(posedge clk) begin
-    if (reg_write_sel && mem_wstrb[0]) begin
+    if (!resetn) begin
+        gpio_out <= 8'h0;
+    end else if (reg_write_sel && mem_wstrb[0]) begin
         gpio_out <= mem_wdata[7:0];
     end
 end
