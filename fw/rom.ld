@@ -16,7 +16,7 @@ SECTIONS
         . = ALIGN(8);
         _estack = .;
         _stack_top = .;
-    } > RAM
+    } > SRAM
 
     /* code */
     .text : {
