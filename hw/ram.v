@@ -1,5 +1,5 @@
 module ram #(
-    parameter ADDR_BITS = 10,
+    parameter ADDR_BITS = 10
 ) (
     input clk,
     input valid,
