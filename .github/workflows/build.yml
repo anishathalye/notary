@@ -1,0 +1,53 @@
+name: CI
+on:
+  push:
+  schedule:
+    - cron: '0 8 * * 6'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Notary
+        uses: actions/checkout@v2
+      - name: Update apt repository
+        run: sudo apt-get update -y
+      - name: Install packages
+        run: >-
+          sudo apt-get install
+          build-essential
+          clang
+          bison
+          flex
+          libreadline-dev
+          gawk
+          tcl-dev
+          libffi-dev
+          git
+          graphviz
+          xdot
+          pkg-config
+          python3
+          libboost-system-dev
+          libboost-python-dev
+          libboost-filesystem-dev
+          zlib1g-dev
+          python3-pip
+          gcc-riscv64-linux-gnu
+      - name: Install Racket
+        uses: Bogdanp/setup-racket@v0.12
+        with:
+          architecture: x64
+          version: stable
+          variant: regular
+      - name: Install Yosys
+        run: .ci/install-yosys.sh
+      - name: Install bin2coe
+        run: pip3 install bin2coe
+      - name: Install rtl
+        run: raco pkg install --no-docs --batch --auto https://github.com/anishathalye/rtl.git
+      - name: Run verification script
+        run: |
+          PATH="$HOME/yosys:$HOME/.local/bin:$PATH"
+          make verify
+          # print only a subset of the output to avoid huge log output
+          racket verify.rkt | awk 'BEGIN { printall=0 } $1 == "cycle" && $2 % 1000 == 0 || printall { print } $1 == "cycle" && $2 == "180000" { printall=1 }'
