@@ -5,7 +5,7 @@
          (prefix-in @ (combine-in rosette rosutil))
          yosys shiva)
 
-(@term-cache-ephemeral!)
+(@gc-terms!)
 
 (define DEFAULT-TRY-VERIFY-AFTER 180340)
 (define FAST-TRY-VERIFY-AFTER 100)
