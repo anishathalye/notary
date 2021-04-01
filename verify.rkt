@@ -76,7 +76,7 @@
   (let ([all-getters (append registers memories)])
     (if (not (fast))
         all-getters
-        (filter (match-lambda [(cons name _) (not (eq? name '|soc_m ram.ram|))]) all-getters))))
+        (filter (match-lambda [(cons name _) (not (eq? name 'ram.ram))]) all-getters))))
 
 (define cycles
   (verify-deterministic-start
