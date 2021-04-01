@@ -30,6 +30,7 @@ wire [7:0] rx_byte;
 
 reg rx_has_data;
 reg [7:0] rx_data;
+wire read_ready;
 
 // rx logic
 always @(posedge clk) begin
