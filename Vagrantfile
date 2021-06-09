@@ -28,7 +28,7 @@ Vagrant.configure(2) do |config|
 
     echo > ~/.bashrc 'PATH="${HOME}/yosys:${HOME}/racket/bin:${HOME}/.local/bin:${PATH}"'
 
-    ~/racket/bin/raco pkg install --no-docs --batch --auto https://github.com/anishathalye/rtl.git
+    ~/racket/bin/raco pkg install --no-docs --batch --auto https://github.com/anishathalye/rtlv.git
   EOS
 
 end

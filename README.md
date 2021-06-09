@@ -103,7 +103,7 @@ dependencies manually:
 - [Racket]
 - [Rosette]
 - [bin2coe]
-- [rtl] --- our Yosys to Rosette compiler, and the core deterministic start verification implementation
+- [rtlv] --- our Yosys to Rosette compiler, and the core deterministic start verification implementation
 
 ## Overview
 
@@ -217,7 +217,7 @@ The general workflow is:
 [RISC-V ISA]: https://people.eecs.berkeley.edu/~krste/papers/riscv-privileged-v1.9.pdf
 [Rosette]: https://github.com/emina/rosette
 [bin2coe]: https://github.com/anishathalye/bin2coe
-[rtl]: https://github.com/anishathalye/rtl
+[rtlv]: https://github.com/anishathalye/rtlv
 [RISC-V compiler toolchain]: https://github.com/riscv/riscv-gnu-toolchain
 [Yosys]: https://github.com/YosysHQ/yosys
 [Racket]: https://racket-lang.org/
