@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require "soc.rkt"
-         racket/match racket/cmdline racket/string
+         racket/match racket/cmdline racket/string racket/file racket/list
          (prefix-in @ (combine-in rosette rosutil))
          yosys shiva)
 
@@ -25,6 +25,10 @@
   ; for some reason, the picorv32 has a physical register for x0/zero,
   ; cpuregs[0], whose value can never change in practice
   '((cpu.cpuregs 0)))
+
+(define raw-soc_i
+  (let ([xs (file->lines "./hw/firmware.mem")])
+    (map (lambda (line idx) `((rom.rom ,idx) . ,(@bv (string->number line 16) 32))) xs (range (length xs)))))
 
 (define (hints-default q . args)
   (match q
@@ -82,6 +86,7 @@
   (verify-deterministic-start
    new-symbolic-soc_s
    #:invariant soc_i
+   #:raw-invariant raw-soc_i
    #:step soc_t
    #:reset 'resetn
    #:reset-active 'low

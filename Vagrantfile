@@ -3,7 +3,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = 'ubuntu/bionic64'
 
   # synced folder
-  config.vm.synced_folder '.', '/notary'
+  config.vm.synced_folder '.', '/home/vagrant/notary'
 
   # disable default synced folder
   config.vm.synced_folder '.', '/vagrant', disabled: true
@@ -21,19 +21,27 @@ Vagrant.configure(2) do |config|
   EOS
 
   config.vm.provision 'shell', privileged: false, inline: <<-EOS
-    /notary/.ci/install-yosys.sh
+    /home/vagrant/notary/.ci/install-yosys.sh
 
-    /notary/.ci/install-racket.sh
+    /home/vagrant/notary/.ci/install-racket.sh
 
     pip3 install bin2coe toml
 
     echo > ~/.bashrc 'PATH="${HOME}/yosys:${HOME}/racket/bin:${HOME}/.local/bin:${PATH}"'
 
-    ~/racket/bin/raco pkg install --no-docs --batch --auto https://github.com/anishathalye/rtlv.git
+    ### ~/racket/bin/raco pkg install --no-docs --batch --auto https://github.com/anishathalye/rtlv.git
+
+    git clone https://github.com/sjudson/rtlv.git
+
+    cd rtlv
+
+    raco pkg install
+
+    cd ../
 
     git clone https://github.com/ajreynol/CVC4.git
 
-    cd CVC4
+    cd ./CVC4
 
     git checkout oracles
 
@@ -45,9 +53,7 @@ Vagrant.configure(2) do |config|
   EOS
 
   config.vm.provision 'shell', inline: <<-EOS
-    cd CVC4
-
-    cd build
+    cd ./CVC4/build
 
     make install
   EOS
