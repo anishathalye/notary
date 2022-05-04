@@ -80,7 +80,7 @@
   (let ([all-getters (append registers memories)])
     (if (not (fast))
         all-getters
-        (filter (match-lambda [(cons name _) (not (eq? name 'ram.ram))]) all-getters))))
+        (filter (match-lambda [(cons name _) (eq? name 'cpu.cpuregs)]) all-getters))))
 
 (define cycles
   (verify-deterministic-start
