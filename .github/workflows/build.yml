@@ -44,8 +44,8 @@ jobs:
         run: .ci/install-yosys.sh
       - name: Install bin2coe
         run: pip3 install bin2coe
-      - name: Install rtl
-        run: raco pkg install --no-docs --batch --auto https://github.com/anishathalye/rtl.git
+      - name: Install rtlv
+        run: raco pkg install --no-docs --batch --auto https://github.com/anishathalye/rtlv.git
       - name: Run verification script
         run: |
           PATH="$HOME/yosys:$HOME/.local/bin:$PATH"

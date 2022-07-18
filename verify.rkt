@@ -2,7 +2,7 @@
 
 (require "soc.rkt"
          racket/match racket/cmdline racket/string
-         (prefix-in @ (combine-in rosette rosutil))
+         (prefix-in @ (combine-in rosette/safe rosutil))
          yosys shiva)
 
 (@gc-terms!)
@@ -32,7 +32,7 @@
     [_ #f]))
 
 (define abstract-command
-  (let ([all-fields (fields (new-zeroed-soc_s))])
+  (let ([all-fields (@fields (new-zeroed-soc_s))])
     (cons 'abstract (filter (lambda (f) (string-contains? (symbol->string f) "uart.recv_")) all-fields))))
 
 (define (hints-symbolic q . args)
