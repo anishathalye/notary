@@ -81,14 +81,18 @@ constant 0). If you want to skip verifying that RAM is cleared, you can pass
 ## Setup
 
 If you don't want to install dependencies manually, you can use the provided
-[Vagrant] configuration. Run `vagrant up` to provision a VM with all the
-dependencies installed. Once you've done that, you can `vagrant ssh` into the
-VM.
+[Docker image][docker:anishathalye/notary]. Download it with `docker pull
+anishathalye/notary`.
 
-To run the verification script, run the following in the VM:
+To mount the repository on `/knox` and get a shell in the Docker image, run:
+
+```bash
+docker run -it --rm -v "${PWD}/:/notary" -w /notary anishathalye/notary
+```
+
+To run the verification script, run the following:
 
 ```console
-$ cd /notary
 $ make verify
 $ racket verify.rkt
 ````
@@ -221,4 +225,4 @@ The general workflow is:
 [RISC-V compiler toolchain]: https://github.com/riscv/riscv-gnu-toolchain
 [Yosys]: https://github.com/YosysHQ/yosys
 [Racket]: https://racket-lang.org/
-[Vagrant]: https://www.vagrantup.com/
+[docker:anishathalye/notary]: https://hub.docker.com/repository/docker/anishathalye/notary

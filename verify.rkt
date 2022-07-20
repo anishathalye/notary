@@ -2,7 +2,7 @@
 
 (require "soc.rkt"
          racket/match racket/cmdline racket/string
-         (prefix-in @ (combine-in rosette/safe rosutil))
+         (prefix-in @ (combine-in rosette/safe rosutil yosys/generic))
          yosys shiva)
 
 (@gc-terms!)
