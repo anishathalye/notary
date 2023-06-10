@@ -196,7 +196,7 @@ The general workflow is:
 
 ## Citation
 
-```
+```bibtex
 @inproceedings{notary:sosp19,
     author = {Athalye, Anish and Belay, Adam and Kaashoek, M. Frans and Morris, Robert and Zeldovich, Nickolai},
     title = {Notary: A Device for Secure Transaction Approval},
