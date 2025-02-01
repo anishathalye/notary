@@ -1,4 +1,4 @@
-# Notary: A Device for Secure Transaction Approval [![Build Status](https://github.com/anishathalye/notary/workflows/CI/badge.svg)](https://github.com/anishathalye/notary/actions?query=workflow%3ACI)
+# Notary: A Device for Secure Transaction Approval [![Build Status](https://github.com/anishathalye/notary/actions/workflows/ci.yml/badge.svg)](https://github.com/anishathalye/notary/actions/workflows/ci.yml)
 
 This repository contains the code for verifying deterministic start for
 Notary's agent SoC. For more details, see our [SOSP paper][sosp] or
