@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cd ~
-git clone https://github.com/YosysHQ/yosys
+git clone -b yosys-0.21 https://github.com/YosysHQ/yosys.git
 cd yosys
 cat >Makefile.conf <<EOF
 ENABLE_TCL := 0

@@ -35,7 +35,7 @@ RUN apt-get update \
     pkg-config \
     python3.10-dev
 
-RUN git clone https://github.com/YosysHQ/yosys.git \
+RUN git clone -b yosys-0.21 https://github.com/YosysHQ/yosys.git \
     && cd yosys \
     && echo >>Makefile.conf "ENABLE_TCL := 0" \
     && echo >>Makefile.conf "ENABLE_GLOB := 0" \
